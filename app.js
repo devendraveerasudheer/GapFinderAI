@@ -101,6 +101,10 @@ function apiMaterials() {
   return state.materials.map(({ id, name, kind, text }) => ({ id, name, kind, text }));
 }
 
+function invalidApiResponseMessage() {
+  return 'The frontend received a non-JSON response instead of the GapFinder API. The Python backend is missing or not routed. For local use, start with .\\start.ps1; Vercel deployment requires a separately deployed and configured backend.';
+}
+
 async function apiRequest(path, payload, options = {}) {
   const response = await fetch(path, {
     method: options.method || 'POST',
@@ -113,7 +117,7 @@ async function apiRequest(path, payload, options = {}) {
   try {
     result = await response.json();
   } catch {
-    throw new Error('The local server returned an invalid response. Start the app with start.ps1.');
+    throw new Error(invalidApiResponseMessage());
   }
   if (!response.ok) throw new Error(result.error || `The request failed (${response.status}).`);
   return result;
@@ -125,7 +129,7 @@ async function apiGet(path) {
   try {
     result = await response.json();
   } catch {
-    throw new Error('The server returned an invalid response.');
+    throw new Error(invalidApiResponseMessage());
   }
   if (!response.ok) throw new Error(result.error || `The request failed (${response.status}).`);
   return result;

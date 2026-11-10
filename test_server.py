@@ -343,6 +343,15 @@ class LocalServerTests(unittest.TestCase):
             urlopen(request)
         self.assertEqual(raised.exception.code, 403)
 
+    def test_configured_vercel_origin_can_proxy_to_api(self):
+        request = Request(
+            f"{self.base_url}/api/health",
+            headers={"Origin": "https://gapfinder.vercel.app"},
+        )
+        with patch.dict(os.environ, {"APP_ORIGINS": "https://gapfinder.vercel.app"}):
+            with urlopen(request) as response:
+                self.assertEqual(response.status, 200)
+
     def test_registration_requires_activity_notice_acknowledgement(self):
         status, response, _ = self.api_request(
             "/api/auth/register",

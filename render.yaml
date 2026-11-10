@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: gapfinder-api
+    runtime: python
+    plan: starter
+    buildCommand: python -m py_compile server.py
+    startCommand: python server.py
+    healthCheckPath: /api/health
+    disk:
+      name: gapfinder-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: SERVER_HOST
+        value: 0.0.0.0
+      - key: GAPFINDER_DB
+        value: /var/data/gapfinder.sqlite3
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: ALLOWED_HOSTS
+        value: gapfinder-api.onrender.com
+      - key: APP_ORIGINS
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

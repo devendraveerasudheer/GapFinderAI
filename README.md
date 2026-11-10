@@ -29,11 +29,23 @@ Students register with their own email and password. They must acknowledge the a
 On the login page, select **Admin**, then enter the email and password set as `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local `.env` file. For example, the configuration uses this shape:
 
 ```dotenv
-ADMIN_EMAIL= admin@gmail.com
-ADMIN_PASSWORD= admin123456789
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=replace-with-a-private-password-of-at-least-12-characters
 ```
 
-These are placeholders, not working credentials. Use the values you configured locally. Do not put a real admin password in this README or commit it to source control; `.env` is ignored by Git.
+These are placeholders, not working credentials. Use the values you configured locally. Do not put real admin credentials in this README or commit them to source control; `.env` is ignored by Git.
+
+## Vercel deployment
+
+Vercel serves the frontend; the Python API and SQLite database run on Render. The repository includes a Render Blueprint (`render.yaml`) with a persistent disk and a Vercel rewrite (`vercel.json`) that forwards `/api/*` requests to the Python service.
+
+1. Push this project to GitHub and create a Render Blueprint from the repository. Keep the service name `gapfinder-api` so it matches the Vercel rewrite. The Blueprint uses a paid Render service plan because the SQLite database needs a persistent disk.
+2. In the Render service's environment settings, set `GROQ_API_KEY`, `ADMIN_EMAIL`, and a unique `ADMIN_PASSWORD` (at least 12 characters). Set `APP_ORIGINS` to the exact Vercel site origin, for example `https://your-project.vercel.app` (no trailing slash). For Vercel preview domains, add each approved origin as a comma-separated entry. Keep these secrets on Render; do not put them in Vercel client-side variables.
+3. Wait for the Render service health check at `/api/health` to pass.
+4. Import the same repository into Vercel and deploy the static frontend. The included `vercel.json` sends API requests through Vercel to `https://gapfinder-api.onrender.com`, keeping browser sessions same-origin. If you change the Render service name or domain, update this destination and `ALLOWED_HOSTS` in `render.yaml` to match.
+5. Open the Vercel deployment and test student registration/login, then sign in as Admin. The SQLite database is stored on the Render persistent disk at `/var/data/gapfinder.sqlite3`.
+
+If you see an HTML/non-JSON API response, check the Vercel rewrite destination and the Render service health page. If Render rejects requests, verify that `APP_ORIGINS` exactly matches the deployed Vercel origin. For local use, start with `.\start.ps1`.
 
 The SQLite database is stored in `gapfinder.sqlite3`; it is ignored by Git and should be backed up securely. Student workspaces persist on the server for their own accounts. Activity events are automatically deleted after 10 days.
 
@@ -41,7 +53,7 @@ The SQLite database is stored in `gapfinder.sqlite3`; it is ignored by Git and s
 
 The admin dashboard at **Student activity** shows the last login, number of logins, active time on study pages, quiz count and scores, and topic-level quiz results. The admin API does not expose student chat messages, quiz answer text, uploaded materials, or file names.
 
-Students see the exact activity scope before they create an account and a reminder while signed in. Time is counted while the browser tab is visible and reported in short intervals. The dashboard is intended for learning support, not covert surveillance.
+Students see the exact activity scope before they create an account. Time is counted while the browser tab is visible and reported in short intervals. The dashboard is intended for learning support, not covert surveillance.
 
 By default, the server only listens on the local computer. To let devices on a trusted local network connect, set `SERVER_HOST=0.0.0.0` and add the server's IP/hostname to `ALLOWED_HOSTS`. For example:
 

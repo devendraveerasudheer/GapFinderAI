@@ -990,9 +990,16 @@ class GapFinderHandler(SimpleHTTPRequestHandler):
         origin = self.headers.get("Origin")
         if origin:
             parsed_origin = urlsplit(origin)
+            allowed_origins = {
+                entry.strip().rstrip("/").lower()
+                for entry in os.environ.get("APP_ORIGINS", "").split(",")
+                if entry.strip()
+            }
+            same_origin = parsed_origin.netloc.lower() == self.headers.get("Host", "").lower()
+            explicitly_allowed = origin.rstrip("/").lower() in allowed_origins
             if (
                 parsed_origin.scheme not in {"http", "https"}
-                or parsed_origin.netloc.lower() != self.headers.get("Host", "").lower()
+                or not (same_origin or explicitly_allowed)
             ):
                 self._json(403, {"error": "Cross-origin requests are not allowed."})
                 return False
