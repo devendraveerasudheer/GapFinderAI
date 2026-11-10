@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f7fb" />
+    <meta name="description" content="Find your learning gaps and make every revision session count." />
+    <title>GapFinder AI — Study with direction</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section class="login-shell" id="login-screen">
+        <div class="login-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div>
+          <div class="art-orbit orbit-two"></div>
+          <div class="art-star star-one">✦</div>
+          <div class="art-star star-two">✳</div>
+          <div class="art-card">
+            <div class="art-card-top"><span class="art-dot"></span><span class="art-dot"></span><span class="art-dot"></span></div>
+            <div class="art-card-label">YOUR LEARNING SNAPSHOT</div>
+            <div class="art-progress-title">Biology · Topic mastery</div>
+            <div class="art-progress-row"><span>Cell structure</span><b>82%</b></div>
+            <div class="art-track"><span style="width: 82%"></span></div>
+            <div class="art-progress-row"><span>Photosynthesis</span><b>48%</b></div>
+            <div class="art-track"><span class="track-warm" style="width: 48%"></span></div>
+            <div class="art-progress-row"><span>Respiration</span><b>67%</b></div>
+            <div class="art-track"><span class="track-lilac" style="width: 67%"></span></div>
+            <div class="art-insight"><span class="insight-icon">✦</span><span><b>One clear next step</b><br />Review photosynthesis first</span><span class="insight-arrow">↗</span></div>
+          </div>
+          <p class="art-caption">Less guesswork. More progress.</p>
+        </div>
+        <div class="login-panel">
+          <div class="brand login-brand"><span class="brand-mark">g<span>✳</span></span><span>gapfinder<span class="brand-ai">AI</span></span></div>
+          <div class="login-copy">
+            <div class="eyebrow">YOUR PERSONAL STUDY COMPANION</div>
+            <h1>Find what you<br />don’t know <em>yet.</em></h1>
+            <p id="login-description">Sign in to your study space, or create a student account to get started.</p>
+          </div>
+          <form id="login-form" class="login-form">
+            <fieldset class="login-role-picker" id="login-role-picker">
+              <legend>Sign in as</legend>
+              <div class="login-role-options">
+                <button class="login-role-option selected" id="student-role-button" type="button" data-role="student" aria-pressed="true">Student</button>
+                <button class="login-role-option" id="admin-role-button" type="button" data-role="admin" aria-pressed="false">Admin</button>
+              </div>
+            </fieldset>
+            <div id="register-name-wrap" class="hidden">
+              <label for="register-name">Your name</label>
+              <input id="register-name" name="name" type="text" autocomplete="name" maxlength="100" />
+            </div>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="username" required />
+            <label for="password">Password</label>
+            <div class="password-wrap">
+              <input id="password" name="password" type="password" autocomplete="current-password" required />
+              <button class="password-toggle" id="password-toggle" type="button" aria-label="Show password">Show</button>
+            </div>
+            <label id="monitoring-consent-wrap" class="monitoring-consent hidden">
+              <input id="monitoring-consent" type="checkbox" />
+              <span>I understand that an authorized admin can see my login/session times, pages visited and time spent, and quiz scores and topic gaps. My chat messages, answers, and uploaded files are not included in the admin activity report.</span>
+            </label>
+            <p class="login-error" id="login-error" role="alert"></p>
+            <button class="button button-primary login-submit" id="login-submit" type="submit">Sign in <span>→</span></button>
+            <button class="text-button auth-mode-toggle" id="auth-mode-toggle" type="button">Create a student account</button>
+          </form>
+          <div class="login-foot"><span>Built for curious minds.</span><span>Activity monitoring is disclosed before student registration</span></div>
+        </div>
+      </section>
+
+      <div class="workspace hidden" id="workspace">
+        <aside class="sidebar" id="sidebar">
+          <a class="brand sidebar-brand" href="#" data-view="dashboard" aria-label="GapFinder home"><span class="brand-mark">g<span>✳</span></span><span>gapfinder<span class="brand-ai">AI</span></span></a>
+          <div class="sidebar-label">WORKSPACE</div>
+          <nav class="main-nav" aria-label="Main navigation">
+            <button class="nav-item student-only active" data-view="dashboard"><span class="nav-icon">⌂</span><span>Overview</span></button>
+            <button class="nav-item student-only" data-view="materials"><span class="nav-icon">▤</span><span>My materials</span><span class="nav-count" id="material-count">3</span></button>
+            <button class="nav-item student-only" data-view="diagnostic"><span class="nav-icon">◉</span><span>Diagnostic quiz</span></button>
+            <button class="nav-item student-only" data-view="gaps"><span class="nav-icon">◫</span><span>Gap report</span><span class="nav-new">NEW</span></button>
+            <button class="nav-item student-only" data-view="plan"><span class="nav-icon">☷</span><span>Revision plan</span></button>
+            <button class="nav-item student-only" data-view="explain"><span class="nav-icon">✧</span><span>Ask your materials</span></button>
+            <button class="nav-item teacher-only hidden" data-view="classroom"><span class="nav-icon">▥</span><span>Class insights</span></button>
+            <button class="nav-item admin-only hidden" data-view="admin"><span class="nav-icon">▤</span><span>Student activity</span></button>
+          </nav>
+          <div class="sidebar-spacer"></div>
+          <div class="sidebar-tip student-only">
+            <div class="tip-icon">✦</div>
+            <b>A little progress<br />adds up.</b>
+            <p>Short, focused sessions are easier to stick with.</p>
+            <button data-view="plan" class="tip-link">See your plan <span>→</span></button>
+            <div class="tip-orb"></div>
+          </div>
+          <div class="sidebar-bottom">
+            <div class="student-avatar" id="sidebar-avatar">S</div>
+            <div class="student-info"><b id="sidebar-name">Sam Student</b><span>Personal workspace</span></div>
+            <button id="logout-button" class="icon-button logout-button" title="Sign out" aria-label="Sign out">↪</button>
+          </div>
+        </aside>
+
+        <main class="main-area">
+          <header class="topbar">
+            <button id="mobile-menu" class="icon-button mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="breadcrumbs"><span>My workspace</span><span class="crumb-slash">/</span><b id="breadcrumb-current">Overview</b></div>
+            <div class="topbar-right">
+              <span class="privacy-chip"><span></span> Private workspace</span>
+              <button id="top-logout-button" class="button button-secondary button-sm top-logout-button" type="button">Log out</button>
+              <button class="top-avatar" id="top-avatar" aria-label="Account">S</button>
+            </div>
+          </header>
+          <div id="view-root" class="view-root"></div>
+          <footer class="app-footer"><span>GapFinder AI <span class="footer-dot">·</span> Learn with direction</span><button class="text-button" data-view="how-it-works">How the AI works</button></footer>
+        </main>
+      </div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <input id="file-input" class="visually-hidden" type="file" accept=".pdf,.txt,.md,.markdown,text/plain,application/pdf" multiple />
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
