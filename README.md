@@ -22,7 +22,18 @@ GapFinder turns study materials into source-grounded explanations, diagnostic qu
 
 5. Open the local URL printed by the server, normally `http://127.0.0.1:8000`. Keep the server running.
 
-Students register with their own email and password. They must acknowledge the activity notice before registration. The admin signs in with `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
+Students register with their own email and password. They must acknowledge the activity notice before registration.
+
+## Admin sign-in
+
+On the login page, select **Admin**, then enter the email and password set as `ADMIN_EMAIL` and `ADMIN_PASSWORD` in your local `.env` file. For example, the configuration uses this shape:
+
+```dotenv
+ADMIN_EMAIL= admin@gmail.com
+ADMIN_PASSWORD= admin123456789
+```
+
+These are placeholders, not working credentials. Use the values you configured locally. Do not put a real admin password in this README or commit it to source control; `.env` is ignored by Git.
 
 The SQLite database is stored in `gapfinder.sqlite3`; it is ignored by Git and should be backed up securely. Student workspaces persist on the server for their own accounts. Activity events are automatically deleted after 10 days.
 
